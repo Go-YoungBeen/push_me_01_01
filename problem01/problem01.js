@@ -10,12 +10,12 @@
  */
 function manageVariables() {
   let a = 1;
-  a++; // 🚨
+  a++;
   let b = 19;
-  b += 1; // 🚨
+  b += 1;
 
   let c = 100;
-  c = 200; // 🚨
+  c = 200;
   return { a, b, c };
 }
 module.exports = manageVariables;
