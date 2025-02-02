@@ -1,0 +1,47 @@
+name: Combined CI with Auto Approve
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  pull_request_target:
+    types: [opened, reopened, synchronize]
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  pull-requests: read
+  contents: read
+
+jobs:
+  auto-approve:
+    if: github.event_name == 'pull_request_target'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auto Approve PR Workflows
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUMBER=${{ github.event.pull_request.number }}
+          RUN_IDS=$(gh api "/repos/${{ github.repository }}/actions/runs?event=pull_request&pull_request=$PR_NUMBER" --jq '.workflow_runs[] | select(.status == "waiting") | .id')
+          for RUN_ID in $RUN_IDS; do
+            gh api -X POST "/repos/${{ github.repository }}/actions/runs/$RUN_ID/approve"
+          done
+
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Use Node.js 22.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test

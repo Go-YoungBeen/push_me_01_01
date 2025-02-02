@@ -1,0 +1,11 @@
+# node_modules 폴더 무시
+node_modules/
+
+# coverage 폴더(테스트 커버리지 결과) 무시
+coverage/
+
+# 환경 변수 파일(.env 등) 무시
+.env
+
+# npm 패키지 관련 파일 무시
+package-lock.json

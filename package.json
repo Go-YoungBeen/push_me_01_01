@@ -1,0 +1,9 @@
+{
+    "name": "push_me_01_01",
+    "scripts": {
+      "test": "jest"
+    },
+    "devDependencies": {
+      "jest": "^29.7.0"
+    }
+}
